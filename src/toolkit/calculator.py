@@ -87,9 +87,13 @@ def find_first_operator(token: list) -> list:
                 token[i-1:i+2] = [str(res)]
 
             case "%":
-                if Decimal(token[i+1]) == 0:
+                a = Decimal(token[i-1])
+                b = Decimal(token[i+1])
+                if b == 0:
                     raise DivisionByZeroError("Деление на ноль")
-                res = Decimal(token[i-1]) % Decimal(token[i+1])
+                
+                q = floor(a / b)
+                res = a - Decimal(q) * b   
                 token[i-1:i+2] = [str(res)]
                 
             case _:
