@@ -1,4 +1,10 @@
-from decimal import Decimal, InvalidOperation
+from decimal import (
+    Decimal,
+    getcontext,
+    ROUND_HALF_UP,
+    InvalidOperation,
+)
+
 from math import floor
 from re import findall
 
@@ -8,6 +14,10 @@ from toolkit.errors import (
     InvalidExpressionError,
     InvalidSymbolError,
 )
+
+# 10 значащих нулей и округление 5>=
+getcontext().prec = 10
+getcontext().rounding = ROUND_HALF_UP
 
 
 # токенизация выражения
@@ -100,8 +110,7 @@ def find_first_operator(token: list) -> list:
                 if b == 0:
                     raise DivisionByZeroError("Деление на ноль")
 
-                q = floor(a / b)
-                res = a - Decimal(q) * b
+                res = a - Decimal(floor(a / b)) * b
                 token[i - 1 : i + 2] = [str(res)]
 
             case _:

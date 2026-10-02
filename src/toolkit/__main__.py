@@ -1,3 +1,4 @@
+from decimal import Decimal
 import argparse
 import sys
 
@@ -20,7 +21,7 @@ def main():
         "convert",
         help="конвертировать единицы измерения",
     )
-    convert_parser.add_argument("VALUE", type=float)
+    convert_parser.add_argument("VALUE", type=Decimal)
     convert_parser.add_argument(
         "--from", dest="from_unit", metavar="UNIT", required=True
     )
