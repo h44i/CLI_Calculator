@@ -66,7 +66,7 @@ python -m toolkit convert VALUE --from UNIT --to UNIT
 `14.0`
 
 ## `IV.` Прочее
-Отработка ошибок:
+Отработка ошибок с выводом выражения и результата:
 ```
 python -m pytest -v -s
 ```
