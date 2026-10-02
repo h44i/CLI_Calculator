@@ -68,7 +68,7 @@ python -m toolkit convert VALUE --from UNIT --to UNIT
 ## `IV.` Прочее
 Отработка ошибок:
 ```
-python -m pytest
+python -m pytest -v -s
 ```
 Помощь:
 ```
