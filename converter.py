@@ -10,7 +10,7 @@ from toolkit.errors import (
     UnknownUnitError,
 )
 
-# 10 значащих нулей и округление 5>=
+# 10 значащих цифр и округление 5>=
 getcontext().prec = 10
 getcontext().rounding = ROUND_HALF_UP
 
