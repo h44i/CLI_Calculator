@@ -7,7 +7,7 @@ from toolkit.converter import convert
 from toolkit.errors import ToolkitError
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(prog="toolkit")
     subparsers = parser.add_subparsers(dest="command")
 
