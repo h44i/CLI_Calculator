@@ -27,7 +27,7 @@ python -m venv .venv
 
 .venv\Scripts\activate
 
-pip install -e .
+python -m pip install -e ".[test]"
 ```
 Запуск используя команды:
 
