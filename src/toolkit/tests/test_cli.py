@@ -1,6 +1,7 @@
 import subprocess
 import sys
 
+
 def test_calc():
     result = subprocess.run(
         [sys.executable, "-m", "toolkit", "calc", "2 + 2 * 2"],
@@ -9,6 +10,7 @@ def test_calc():
     )
     assert result.returncode == 0
     assert result.stdout.strip() == "6.0"
+
 
 def test_error():
     result = subprocess.run(

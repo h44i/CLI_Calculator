@@ -1,42 +1,45 @@
-from re import findall
-from math import floor
 from decimal import Decimal, InvalidOperation
+from math import floor
+from re import findall
+
 from toolkit.errors import (
-    EmptyExpressionError, 
-    InvalidExpressionError, 
-    DivisionByZeroError, 
+    DivisionByZeroError,
+    EmptyExpressionError,
+    InvalidExpressionError,
     InvalidSymbolError,
 )
 
 
-# токенизация
+# токенизация выражения
 def tokenization(s: str) -> list:
-    # проверка ошибок
+    # проверка входных данных
     if not s.strip():
         raise EmptyExpressionError("Пустое выражение")
-    
+
     for i in s:
         if i not in "0123456789.+-*/% ":
             raise InvalidSymbolError("Недопустимый символ")
 
-    # регулярка
-    r = r'//|%|[-+*/]|[0-9]+[.][0-9]+|[0-9]+'
+    # разбиение выражения на токены с помощью регулярного выражения
+    r = r"//|%|[-+*/]|[0-9]+[.][0-9]+|[0-9]+"
     token = findall(r, s)
 
-    # поиск унарного минуса/плюса
+    # объединение унарных знаков с числами
     for i in range(len(token) - 2, -1, -1):
+        # проверка через соседние токены
         if (
-            token[i] in '+-' 
-            and (i == 0 or is_operator(token[i-1])) 
-            and is_number(token[i+1])
+            token[i] in "+-"
+            and (i == 0 or is_operator(token[i - 1]))
+            and is_number(token[i + 1])
         ):
-            token[i:i+2] = [token[i] + token[i+1]]
-            
+            token[i : i + 2] = [token[i] + token[i + 1]]
+
     return token
 
 
-# проверка что токен это число
+# проверка, является ли токен числом
 def is_number(token: str) -> bool:
+    # True, если токен можно преобразовать в Decimal иначе False
     try:
         Decimal(token)
         return True
@@ -44,70 +47,75 @@ def is_number(token: str) -> bool:
         return False
 
 
-# проверка что токен это оператор
+# проверка, является ли токен оператором
 def is_operator(token: str) -> bool:
+    # True, если токен является оператором иначе False
     return token in {"+", "-", "*", "/", "%", "//"}
 
 
-# проверка токенизированного списка
+# проверка корректности последовательности токенов
 def validation(token: list) -> None:
-    # проверка ошибок
+    # проверяет, что выражение не начинается и не заканчивается оператором
+    # а также что два числа или два оператора не идут подряд
     if is_operator(token[0]):
         raise InvalidExpressionError("Не может начинаться с оператора")
-    
+
     elif is_operator(token[-1]):
         raise InvalidExpressionError("Не может заканчиваться оператором")
 
-    for i in range(len(token)-1):
-        if is_number(token[i]) and is_number(token[i+1]):
+    for i in range(len(token) - 1):
+        if is_number(token[i]) and is_number(token[i + 1]):
             raise InvalidExpressionError("Два числа подряд")
-        
-        elif is_operator(token[i]) and is_operator(token[i+1]):
-             raise InvalidExpressionError("Два оператора подряд")
+
+        elif is_operator(token[i]) and is_operator(token[i + 1]):
+            raise InvalidExpressionError("Два оператора подряд")
 
 
-# ищем умножение или деление потом замена среза на конечное значение
+# вычисление операций с высоким приоритетом
 def find_first_operator(token: list) -> list:
+    # если нашелся оператор с высоким приоритетом, то его левый и правый операнды
+    # заменяются результатом операции
     i = 1
     while i < len(token) - 1:
         match token[i]:
             case "*":
-                res = Decimal(token[i-1]) * Decimal(token[i+1])
-                token[i-1:i+2] = [str(res)]
+                res = Decimal(token[i - 1]) * Decimal(token[i + 1])
+                token[i - 1 : i + 2] = [str(res)]
 
             case "/":
-                if Decimal(token[i+1]) == 0:
+                if Decimal(token[i + 1]) == 0:
                     raise DivisionByZeroError("Деление на ноль")
-                res = Decimal(token[i-1]) / Decimal(token[i+1])
-                token[i-1:i+2] = [str(res)]
+                res = Decimal(token[i - 1]) / Decimal(token[i + 1])
+                token[i - 1 : i + 2] = [str(res)]
 
             case "//":
-                if Decimal(token[i+1]) == 0:
+                if Decimal(token[i + 1]) == 0:
                     raise DivisionByZeroError("Деление на ноль")
-                res = Decimal(token[i-1]) // Decimal(token[i+1])
-                token[i-1:i+2] = [str(res)]
+                res = Decimal(token[i - 1]) // Decimal(token[i + 1])
+                token[i - 1 : i + 2] = [str(res)]
 
             case "%":
-                a = Decimal(token[i-1])
-                b = Decimal(token[i+1])
+                a = Decimal(token[i - 1])
+                b = Decimal(token[i + 1])
                 if b == 0:
                     raise DivisionByZeroError("Деление на ноль")
-                res = a - Decimal(floor(a / b)) * b   
-                token[i-1:i+2] = [str(res)]
-                
+
+                q = floor(a / b)
+                res = a - Decimal(q) * b
+                token[i - 1 : i + 2] = [str(res)]
+
             case _:
                 i += 1
-            
+
     return token
 
 
-# подсчет листа
+# вычисление оставшихся операций (сложение и вычитание)
 def calculation(token: list) -> Decimal:
     token = find_first_operator(token)
     res = Decimal(token[0])
-    
-    for i in range(1, len(token), 2):
 
+    for i in range(1, len(token), 2):
         op = token[i]
         num = Decimal(token[i + 1])
 
@@ -120,9 +128,9 @@ def calculation(token: list) -> Decimal:
     return res
 
 
-# конечный вывод
+# основная функция вычисления выражения
 def evaluate(s: str) -> float:
     token = tokenization(s)
     validation(token)
-    
+
     return float(calculation(token))
