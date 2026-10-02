@@ -22,7 +22,7 @@ def test_5():
     assert evaluate("0.1 + 0.001 + -0.3") == -0.199
     
 def test_6():
-    assert evaluate("7 % 5") == 2.0
+    assert evaluate("-7 % 5") == 3.0
 
 
 def test_EmptyExpression():
