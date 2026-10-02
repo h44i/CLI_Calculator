@@ -1,4 +1,5 @@
 from re import findall
+from math import floor
 from decimal import Decimal, InvalidOperation
 from toolkit.errors import (
     EmptyExpressionError, 
@@ -91,9 +92,7 @@ def find_first_operator(token: list) -> list:
                 b = Decimal(token[i+1])
                 if b == 0:
                     raise DivisionByZeroError("Деление на ноль")
-                
-                q = floor(a / b)
-                res = a - Decimal(q) * b   
+                res = a - Decimal(floor(a / b)) * b   
                 token[i-1:i+2] = [str(res)]
                 
             case _:
