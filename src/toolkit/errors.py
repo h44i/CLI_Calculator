@@ -2,29 +2,29 @@ class ToolkitError(Exception):
     pass
 
 
-class EmptyExpressionError(ToolkitError):
+class Empty_Expression_Error(ToolkitError):
     pass
 
 
-class InvalidSymbolError(ToolkitError):
+class Invalid_Symbol_Error(ToolkitError):
     pass
 
 
-class InvalidExpressionError(ToolkitError):
+class Invalid_Expression_Error(ToolkitError):
     pass
 
 
-class DivisionByZeroError(ToolkitError):
+class Division_By_Zero_Error(ToolkitError):
     pass
 
 
-class UnknownUnitError(ToolkitError):
+class Unknown_Unit_Error(ToolkitError):
     pass
 
 
-class IncompatibleUnitsError(ToolkitError):
+class Incompatible_Units_Error(ToolkitError):
     pass
 
 
-class InvalidTemperatureError(ToolkitError):
+class Invalid_Temperature_Error(ToolkitError):
     pass
