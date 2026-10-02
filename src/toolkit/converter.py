@@ -62,6 +62,7 @@ def to_c(value: Decimal, to_unit: str) -> Decimal:
         return (value - Decimal("32")) * Decimal("5") / Decimal("9")
     elif to_unit == "k":
         return value - Decimal("273.15")
+    raise UnknownUnitError("Неизвестная единица")
 
 
 # перевод температуры из градусов цельсия в указанную единицу
@@ -72,3 +73,4 @@ def from_c(value: Decimal, to_unit: str) -> Decimal:
         return (value * Decimal("9") / Decimal("5")) + Decimal("32")
     elif to_unit == "k":
         return value + Decimal("273.15")
+    raise UnknownUnitError("Неизвестная единица")
