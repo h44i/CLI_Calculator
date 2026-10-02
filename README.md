@@ -17,14 +17,26 @@
 ## `II.` Запуск программы
 Перейти в папку программы:
 
-`cd [path]`
+```
+cd [path]
+```
 
+Создание виртуального окружения:
+```
+python -m venv .venv
+
+.venv\Scripts\activate
+
+pip install -e .
+```
 Запуск используя команды:
 
-`python -m toolkit calc "EXPRESSION"`
-
-`python -m toolkit convert VALUE --from UNIT --to UNIT`
-
+```
+python -m toolkit calc "EXPRESSION"
+```
+```
+python -m toolkit convert VALUE --from UNIT --to UNIT
+```
 ## `III.` Алгоритм
 
 Для вычисления выражения программа сначала выполняет токенизацию, преобразуя строку в список отдельных токенов, разделяя на числа и операторы.
@@ -55,15 +67,16 @@
 
 ## `IV.` Прочее
 Отработка ошибок:
-
-`python -m pytest`
-
+```
+python -m pytest
+```
 Помощь:
-
-`python -m toolkit --help`
-
-`python -m toolkit [calc/convert] --help`
-
+```
+python -m toolkit --help
+```
+```
+python -m toolkit [calc/convert] --help
+```
 
 
 
