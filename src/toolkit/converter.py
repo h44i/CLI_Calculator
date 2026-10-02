@@ -45,7 +45,7 @@ def convert(value: Decimal, from_unit: str, to_unit: str) -> float:
     # перевод единиц температуры
     elif from_unit in temp and to_unit in temp:
         c = to_c(value, from_unit)
-        if c < -273.15:
+        if c < Decimal("-273.15"):
             raise InvalidTemperatureError("Температура ниже абсолютного нуля")
 
         return float(from_c(c, to_unit))
