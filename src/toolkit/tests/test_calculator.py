@@ -24,7 +24,7 @@ def test_4():
 
 
 def test_5():
-    assert evaluate("0.1 + 0.001 + -0.3") == -0.199
+    assert evaluate(".1 + .001 + -.3 -1.") == -1.199
 
 
 def test_6():
